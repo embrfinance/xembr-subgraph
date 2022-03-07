@@ -1,0 +1,15 @@
+mainnet:
+  network: mainnet
+  XEmbr:
+    address: "0x9aed52F3074ba468c6ad17822b8833210868c31b"
+    startBlock: 2711319
+fuji:
+  network: fuji
+  XEmbr:
+    address: ""
+    startBlock: 2711319
+avalanche:
+  network: avalanche
+  XEmbr:
+    address: ""
+    startBlock: 8169172

@@ -1,0 +1,106 @@
+type XEmbr @entity {
+  # Pool id concatenated with user address
+  id: ID!
+
+  tokenCount: Int!
+  activeTokenCount: Int!
+  totalStaking: BigDecimal!
+  totalXembr: BigDecimal!
+  totalCooling: BigDecimal!
+
+  rewards: [RewardToken!] @derivedFrom(field: "xembr")
+  users: [User!] @derivedFrom(field: "xembr")
+
+  userCount: Int!
+}
+
+type RewardToken @entity { 
+  id: ID!
+
+  xembr: XEmbr!
+
+  index: BigInt!
+  
+  symbol: String
+  name: String
+  decimals: Int!
+  address: String!
+
+  expiry: Int!
+  active: Boolean!
+
+  totalClaimed: BigDecimal!
+  totalUnclaimed: BigDecimal!
+}
+
+type TokenSnapshot @entity {
+  id: ID! # token address + dayId
+
+  token: RewardToken!
+
+  totalClaimed: BigDecimal!
+  totalUnclaimed: BigDecimal!
+
+  timestamp: Int!
+}
+
+type User @entity {
+  id: ID!
+
+  xembr: XEmbr
+  owner: Bytes!
+
+  staking: BigDecimal!
+  totalXembr: BigDecimal!
+
+  cooling: BigDecimal!
+  rewards: [UserReward!] @derivedFrom(field: "owner")
+
+  questsCompleted: Int!
+  weightedTimestamp: Int!
+}
+
+type UserReward @entity { 
+  id: ID!
+  
+  owner: User
+  address: Bytes!
+
+  claimed: BigDecimal!
+
+  timestamp: Int!
+  block: BigInt!
+}
+
+
+
+type UserSnapshot @entity {
+  id: ID! # user address + dayId
+
+  owner: User!
+  timestamp: Int!
+
+  apr: BigDecimal!
+
+  staking: BigDecimal!
+  cooling: BigDecimal!
+  totalXembr: BigDecimal!
+
+  rewards: [UserReward!]
+}
+
+type XEmbrSnapshot @entity {
+  id: ID!  # xmbr address + dayId
+
+  xembr: XEmbr!
+
+  timestamp: Int!
+
+  totalStaking: BigDecimal!
+  totalXembr: BigDecimal!
+  totalCooling: BigDecimal!
+
+  rewards: [RewardToken!]
+}
+
+

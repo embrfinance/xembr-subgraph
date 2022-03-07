@@ -1,0 +1,50 @@
+specVersion: 0.0.2
+description: embr is a non-custodial portfolio manager, liquidity provider, and price sensor.
+repository: https://github.com/embrfinanace/xEmbr-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: xEmbrToken
+    network: fuji
+    source:
+      address: '0xd91cb6c5b14C2308541b9147130eCeb1F6d60682'
+      abi: xEmbrToken
+      startBlock: 6721409
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/xembr.ts
+      entities:
+        - XEmbr
+        - RewardToken
+        - XEmbrSnapshot
+        - TokenSnapshot
+        - User
+        - UserSnapshot
+        - UserReward
+      abis:
+        - name: xEmbrToken
+          file: ./abis/xEmbrToken.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: RewardAdded(uint256,indexed address)
+          handler: handleRewardAdded
+        - event: RewardPaid(indexed address,indexed address,indexed address,uint256)
+          handler: handleRewardPaid
+        - event: LogTokenAddition(indexed uint256,indexed address)
+          handler: handleLogTokenAddition
+        - event: LogTokenUpdate(indexed address,uint256,indexed address,uint256)
+          handler: handleLogTokenUpdate
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Withdraw(indexed address,indexed address,uint256)
+          handler: handleWithdraw
+        - event: Staked(indexed address,uint256,address)
+          handler: handleStake
+        - event: Cooldown(indexed address,uint256)
+          handler: handleCooldown
+        - event: CooldownExited(indexed address)
+          handler: handleCooldownExited
